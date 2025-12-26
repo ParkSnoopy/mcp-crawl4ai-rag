@@ -218,8 +218,8 @@ async def crawl4ai_lifespan(server: FastMCP) -> AsyncIterator[Crawl4AIContext]:
 mcp = FastMCP(
     "mcp-crawl4ai-rag",
     lifespan=crawl4ai_lifespan,
-    host=os.getenv("HOST", "0.0.0.0"),
-    port=os.getenv("PORT", "8051")
+    host="127.0.0.1",
+    port=8051, #os.getenv("PORT", 8051)
 )
 
 def rerank_results(model: CrossEncoder, query: str, results: List[Dict[str, Any]], content_key: str = "content") -> List[Dict[str, Any]]:
@@ -1841,13 +1841,7 @@ async def crawl_recursive_internal_links(crawler: AsyncWebCrawler, start_urls: L
     return results_all
 
 async def main():
-    transport = os.getenv("TRANSPORT", "sse")
-    if transport == 'sse':
-        # Run the MCP server with sse transport
-        await mcp.run_sse_async()
-    else:
-        # Run the MCP server with stdio transport
-        await mcp.run_stdio_async()
+    await mcp.run_stdio_async()
 
 if __name__ == "__main__":
     asyncio.run(main())
